@@ -11,28 +11,32 @@ export default function Home() {
         {/* Painel 1 */}
         <div className="bg-[#033349] flex flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
           <h2 className="font-bold md:text-2xl text-lg mb-4 text-white">Insira os valores da matriz:</h2>
-          <form className="grid grid-cols-3 gap-2">
-            {Array.from({ length: 9 }).map((_, index) => (
-              <input
-                key={index}
-                type="number"
-                className="border-2 rounded-lg p-2 w-16 h-16 text-center font-bold focus:outline-none 
-    focus:border-[#00807d]
-    focus:ring-2 focus:ring-[#00807d]"
-                placeholder={"x"}
-              />
-            ))}
-          </form>
-          <div className="flex flex-row gap-5 justify-center items-center">
-            <button className="p-4 mt-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
-              Calcular Determinante
-            </button>
-            <button className="p-4 mt-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
-              Limpar
-            </button>
-            <button className="p-4 mt-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
-              Aleatório
-            </button>
+          <div className="flex flex-col justify-center items-center">
+            <div className="grid grid-cols-3 gap-2">
+              {Array.from({ length: 9 }).map((_, index) => (
+                <input
+                  key={index}
+                  type="number"
+                  className="border-2 rounded-lg p-2 w-16 h-16 font-bold text-center
+    focus:outline-none focus:border-[#00807d] focus:ring-2 focus:ring-[#00807d]
+    [appearance:textfield] 
+    [&::-webkit-inner-spin-button]:appearance-none 
+    [&::-webkit-outer-spin-button]:appearance-none"
+                  placeholder={"x" + (index + 1)}
+                />
+              ))}
+            </div>
+            <div className="flex sm:flex-row flex-col gap-2 justify-center items-center w-full sm:w-full mt-4">
+              <button className="w-full p-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
+                Calcular
+              </button>
+              <button className="w-full p-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
+                Limpar
+              </button>
+              <button className="w-full p-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
+                Aleatório
+              </button>
+            </div>
           </div>
         </div>
 
