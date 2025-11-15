@@ -59,7 +59,7 @@ export default function Home() {
     // Diagonais positivas
     await wait(500);
     let log: string[] = [];
-    log.push("Diagonais positivas:");
+    log.push("Diagonais principais:");
 
     for (const diagPos of pos) {
       let nums: number[] = [];
@@ -78,7 +78,7 @@ export default function Home() {
     setHighlight([]);
 
     // Diagonais negativas
-    log.push("Diagonais negativas:");
+    log.push("Diagonais secundárias:");
     setSteps([...log]);
     await wait(600);
 
@@ -111,18 +111,24 @@ export default function Home() {
     const somaPos = positivos.reduce((a, b) => a + b, 0)
     const somaNeg = negativos.reduce((a, b) => a + b, 0)
 
-    log.push(`Soma positivas = ${somaPos}`)
+    log.push(`Soma diagonais principais:`)
+    log.push(positivos.map(p => p.toString()).join(" + ") + ` = ${somaPos}`)
     setSteps([...log])
     await wait(500)
 
-    log.push(`Soma negativas = ${somaNeg}`)
+    log.push(`Soma diagonais secundárias:`)
+    log.push(negativos.map(n => n.toString()).join(" + ") + ` = ${somaNeg}`)
     setSteps([...log])
     await wait(500)
 
-    log.push(`Subtração das diagonais = ${somaPos} - ${somaNeg}`);
+    log.push(`Subtração das diagonais:`);
+    log.push(`${somaPos} - ${somaNeg}`)
+    setSteps([...log])
+    await wait(500)
 
     const det = somaPos - somaNeg
-    log.push(`Determinante = ${det}`)
+    log.push(`Determinante:`)
+    log.push(`${det}`)
     setSteps([...log])
 
     setIsAnimating(false)
