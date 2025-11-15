@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { clear } from "console";
 
 export default function Home() {
 
@@ -162,7 +161,7 @@ export default function Home() {
         Cálculo de determinante 3x3 — Regra de Sarrus
       </h1>
 
-      <div className="bg-[#033349] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg">
+      <div className="bg-[#1a1a1a] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg">
 
         {/* MATRIZ ANIMADA */}
         <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
@@ -177,10 +176,10 @@ export default function Home() {
                   key={`${r}-${c}`}
                   animate={{
                     scale: active ? 1.25 : 1,
-                    backgroundColor: active ? "rgba(0,150,255,0.6)" : "rgba(255,255,255,0.15)"
+                    backgroundColor: active ? "#985c7e" : "#57394b"
                   }}
                   transition={{ duration: 0.3 }}
-                  className="w-16 h-16 rounded-lg flex items-center justify-center border font-bold text-white text-lg"
+                  className="sm:w-16 sm:h-16 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-white text-lg"
                 >
                   {isExtra ? (
                     <motion.div
@@ -213,7 +212,7 @@ export default function Home() {
         </div>
 
         {showSteps && (
-          <div className="w-full min-h-[200px] bg-[#024b4d] rounded-lg p-4 text-white text-lg space-y-2 mt-6">
+          <div className="w-full min-h-[200px] bg-[#1a1a1a] rounded-lg p-4 text-white text-lg space-y-2 mt-6">
 
             <h1 className="font-extrabold">Cálculo:</h1>
 
@@ -237,7 +236,7 @@ export default function Home() {
               disabled={isAnimating}
               onClick={calculateDeterminant}
               className={`w-full p-2 rounded-lg font-bold text-white 
-            ${isAnimating ? "bg-gray-500" : "bg-[#005f61] hover:bg-[#00807d] transition-colors"}`}
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
             >
               Calcular
             </button>
@@ -245,7 +244,7 @@ export default function Home() {
               disabled={isAnimating}
               onClick={generateRandomMatrix}
               className={`w-full p-2 rounded-lg font-bold text-white 
-            ${isAnimating ? "bg-gray-500" : "bg-[#005f61] hover:bg-[#00807d] transition-colors"}`}
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
             >
               Aleatório
             </button>
@@ -253,7 +252,7 @@ export default function Home() {
               disabled={isAnimating}
               onClick={clearInputs}
               className={`w-full p-2 rounded-lg font-bold text-white 
-            ${isAnimating ? "bg-gray-500" : "bg-[#005f61] hover:bg-[#00807d] transition-colors"}`}
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
             >
               Limpar
             </button>
