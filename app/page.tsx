@@ -1,67 +1,264 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { clear } from "console";
+
 export default function Home() {
+
+  const [matrix, setMatrix] = useState<number[][]>([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]]
+  );
+
+  const [extended, setExtended] = useState<number[][]>([]);
+  const [steps, setSteps] = useState<string[]>([]);
+  const [highlight, setHighlight] = useState<{ r: number, c: number }[]>([]);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showSteps, setShowSteps] = useState(false);
+
+  const pos = [
+    [[0, 0], [1, 1], [2, 2]],
+    [[0, 1], [1, 2], [2, 3]],
+    [[0, 2], [1, 3], [2, 4]],
+  ]
+
+  const neg = [
+    [[0, 2], [1, 1], [2, 0]],
+    [[0, 3], [1, 2], [2, 1]],
+    [[0, 4], [1, 3], [2, 2]],
+  ]
+
+  function wait(ms: number) {
+    return new Promise(res => setTimeout(res, ms))
+  }
+
+  async function calculateDeterminant() {
+    if (isAnimating) return;
+
+    setShowSteps(true);
+    setIsAnimating(true);
+
+    setSteps([]);
+    setHighlight([]);
+
+    for (let c = 0; c <= 1; c++) {
+      for (let r = 2; r >= 0; r--) {
+        setHighlight([{ r, c }]);
+        await wait(500);
+      }
+      await wait(500);
+    }
+
+    setHighlight([]);
+    await wait(300);
+
+    const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
+    setExtended(extendedMatrix);
+
+    // Diagonais positivas
+    await wait(500);
+    let log: string[] = [];
+    log.push("Diagonais positivas:");
+
+    for (const diagPos of pos) {
+      let nums: number[] = [];
+      for (const [r, c] of diagPos) {
+        setHighlight([{ r, c }]);
+        await wait(500);
+        nums.push(extendedMatrix[r][c]);
+      }
+
+      const product = nums.reduce((a, b) => a * b, 1);
+      log.push(`${nums.join(" × ")} = ${product}`)
+      setSteps([...log])
+      await wait(600)
+    }
+
+    setHighlight([]);
+
+    // Diagonais negativas
+    log.push("Diagonais negativas:");
+    setSteps([...log]);
+    await wait(600);
+
+    for (const diag of neg) {
+
+      let nums: number[] = []
+
+      for (const [r, c] of diag) {
+        setHighlight([{ r, c }])
+        await wait(350)
+        nums.push(extendedMatrix[r][c])
+      }
+
+      const mult = nums.reduce((a, b) => a * b, 1)
+
+      log.push(`${nums.join(" × ")} = ${mult}`)
+      setSteps([...log])
+      await wait(600)
+    }
+
+    setHighlight([])
+
+    const positivos = pos.map(diag =>
+      diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
+    )
+    const negativos = neg.map(diag =>
+      diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
+    )
+
+    const somaPos = positivos.reduce((a, b) => a + b, 0)
+    const somaNeg = negativos.reduce((a, b) => a + b, 0)
+
+    log.push(`Soma positivas = ${somaPos}`)
+    setSteps([...log])
+    await wait(500)
+
+    log.push(`Soma negativas = ${somaNeg}`)
+    setSteps([...log])
+    await wait(500)
+
+    log.push(`Subtração das diagonais = ${somaPos} - ${somaNeg}`);
+
+    const det = somaPos - somaNeg
+    log.push(`Determinante = ${det}`)
+    setSteps([...log])
+
+    setIsAnimating(false)
+
+  }
+
+  function clearInputs() {
+    if (isAnimating) return;
+    setMatrix([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0]]
+    );
+    setExtended([]);
+    setSteps([]);
+    setHighlight([]);
+    setShowSteps(false);
+  }
+
+  function generateRandomMatrix() {
+    if (isAnimating) return;
+    const randomMatrix = Array.from({ length: 3 }, () =>
+      Array.from({ length: 3 }, () => Math.floor(Math.random() * 10) - 5)
+    );
+    setMatrix(randomMatrix);
+    setExtended([]);
+    setSteps([]);
+    setHighlight([]);
+    setShowSteps(false);
+  }
+
   return (
     <main className="flex flex-col items-center justify-center p-6">
+
       <h1 className="font-extrabold mt-4 md:text-3xl text-xl text-center">
-        Cálculo de determinante de uma matriz 3x3 utilizando Regra de Sarrus
+        Cálculo de determinante 3x3 — Regra de Sarrus
       </h1>
 
-      {/* Área dos painéis */}
-      <div className="grid w-full h-full max-w-5xl max-h-5xl gap-6 mt-10 grid-cols-1 sm:grid-cols-2">
+      <div className="bg-[#033349] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg">
 
-        {/* Painel 1 */}
-        <div className="bg-[#033349] flex flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
-          <h2 className="font-bold md:text-2xl text-lg mb-4 text-white">Insira os valores da matriz:</h2>
-          <div className="flex flex-col justify-center items-center">
-            <div className="grid grid-cols-3 gap-2">
-              {Array.from({ length: 9 }).map((_, index) => (
-                <input
-                  key={index}
-                  type="number"
-                  className="border-2 rounded-lg p-2 w-16 h-16 font-bold text-center
-    focus:outline-none focus:border-[#00807d] focus:ring-2 focus:ring-[#00807d]
-    [appearance:textfield] 
-    [&::-webkit-inner-spin-button]:appearance-none 
-    [&::-webkit-outer-spin-button]:appearance-none"
-                  placeholder={"x" + (index + 1)}
-                />
-              ))}
-            </div>
-            <div className="flex sm:flex-row flex-col gap-2 justify-center items-center w-full sm:w-full mt-4">
-              <button className="w-full p-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
-                Calcular
-              </button>
-              <button className="w-full p-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
-                Limpar
-              </button>
-              <button className="w-full p-4 bg-[#005f61] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
-                Aleatório
-              </button>
-            </div>
-          </div>
+        {/* MATRIZ ANIMADA */}
+        <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
+          {(extended.length ? extended : matrix).map((row, r) =>
+            row.map((value, c) => {
+              const active = highlight.some(h => h.r === r && h.c === c)
+
+              const isExtra = extended.length > 0 && c >= 3
+
+              return (
+                <motion.div
+                  key={`${r}-${c}`}
+                  animate={{
+                    scale: active ? 1.25 : 1,
+                    backgroundColor: active ? "rgba(0,150,255,0.6)" : "rgba(255,255,255,0.15)"
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="w-16 h-16 rounded-lg flex items-center justify-center border font-bold text-white text-lg"
+                >
+                  {isExtra ? (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20, scale: 0.8 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                    >
+                      {value}
+                    </motion.div>
+                  ) : (
+                    <input
+                      type="number"
+                      disabled={isAnimating}
+                      className="w-full h-full bg-transparent text-center font-bold text-white
+                        focus:outline-none [appearance:textfield]
+                        [&::-webkit-inner-spin-button]:appearance-none 
+                        [&::-webkit-outer-spin-button]:appearance-none"
+                      value={value}
+                      onChange={(e) => {
+                        const copy = matrix.map(row => [...row])
+                        copy[r][c] = Number(e.target.value)
+                        setMatrix(copy)
+                      }}
+                    />
+                  )}
+                </motion.div>
+              )
+            })
+          )}
         </div>
 
-        {/* Painel 2 */}
-        <div className="bg-[#036564] flex flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
-          <h2 className="font-bold md:text-2xl text-lg mb-4 text-white">Resultado do determinante:</h2>
-          <div className="grid grid-cols-3 gap-2">
-            {Array.from({ length: 9 }).map((_, index) => (
-              <input
-                disabled={true}
-                key={index}
-                type="number"
-                className="border-2 rounded-lg p-2 w-16 h-16 text-center font-bold focus:outline-none
-    focus:border-[#004f73]
-    focus:ring-2 focus:ring-[#004f73]"
-                placeholder={"x"}
-              />
+        {showSteps && (
+          <div className="w-full min-h-[200px] bg-[#024b4d] rounded-lg p-4 text-white text-lg space-y-2 mt-6">
+
+            <h1 className="font-extrabold">Cálculo:</h1>
+
+            {steps.map((s, i) => (
+              <motion.div
+                className="font-bold"
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                {s}
+              </motion.div>
             ))}
           </div>
-          <div className="flex flex-row gap-5 justify-center items-center">
-            <button className="p-4 mt-4 bg-[#004f73] text-white rounded-lg font-bold hover:bg-[#00807d] transition-colors">
+        )}
+
+        {!isAnimating && (
+          <div className="w-full rounded-lg text-white text-lg space-y-2 mt-6">
+            <button
+              disabled={isAnimating}
+              onClick={calculateDeterminant}
+              className={`w-full p-2 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#005f61] hover:bg-[#00807d] transition-colors"}`}
+            >
+              Calcular
+            </button>
+            <button
+              disabled={isAnimating}
+              onClick={generateRandomMatrix}
+              className={`w-full p-2 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#005f61] hover:bg-[#00807d] transition-colors"}`}
+            >
+              Aleatório
+            </button>
+            <button
+              disabled={isAnimating}
+              onClick={clearInputs}
+              className={`w-full p-2 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#005f61] hover:bg-[#00807d] transition-colors"}`}
+            >
               Limpar
             </button>
           </div>
-        </div>
+        )}
       </div>
     </main>
   );
