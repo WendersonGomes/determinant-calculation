@@ -157,11 +157,13 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center p-6">
 
-      <h1 className="font-extrabold mt-4 md:text-3xl text-xl text-center">
+      <motion.h1 className="font-extrabold mt-4 md:text-3xl text-xl text-center" initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}>
         Cálculo de determinante 3x3 — Regra de Sarrus
-      </h1>
+      </motion.h1>
 
-      <div className="bg-[#1a1a1a] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg">
+      <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
 
         {/* MATRIZ ANIMADA */}
         <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
@@ -212,7 +214,9 @@ export default function Home() {
         </div>
 
         {showSteps && (
-          <div className="w-full min-h-[200px] bg-[#] rounded-lg pt-4 pr-4 text-white text-lg space-y-2">
+          <motion.div className="w-full min-h-[200px] bg-[#] rounded-lg pt-4 pr-4 text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}>
 
             <h1 className="font-extrabold">Cálculo:</h1>
 
@@ -220,14 +224,14 @@ export default function Home() {
               <motion.div
                 className="font-bold"
                 key={i}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
               >
                 {s}
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
 
         {!isAnimating && (
@@ -258,7 +262,7 @@ export default function Home() {
             </button>
           </div>
         )}
-      </div>
+      </motion.div>
     </main>
   );
 }
