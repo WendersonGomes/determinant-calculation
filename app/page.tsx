@@ -212,7 +212,7 @@ export default function Home() {
         </div>
 
         {showSteps && (
-          <div className="w-full min-h-[200px] bg-[#1a1a1a] rounded-lg p-4 text-white text-lg space-y-2 mt-6">
+          <div className="w-full min-h-[200px] bg-[#] rounded-lg pt-4 pr-4 text-white text-lg space-y-2">
 
             <h1 className="font-extrabold">Cálculo:</h1>
 
