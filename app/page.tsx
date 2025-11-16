@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Home() {
 
@@ -66,9 +66,9 @@ export default function Home() {
     setExtended(extendedMatrix);
 
     // Diagonais principais
-    await wait(500);
     let log: string[] = [];
     log.push("Diagonais principais:");
+    await wait(300);
 
     for (const diagMain of main) {
       let nums: number[] = [];
@@ -81,15 +81,16 @@ export default function Home() {
       const product = nums.reduce((a, b) => a * b, 1);
       log.push(`${nums.join(" × ")} = ${product}`)
       setSteps([...log])
-      await wait(600)
+      await wait(500)
     }
 
     setHighlight([]);
+    await wait(300);
 
     // Diagonais secundárias
     log.push("Diagonais secundárias:");
     setSteps([...log]);
-    await wait(600);
+    await wait(300);
 
     for (const diag of secondary) {
 
@@ -97,7 +98,7 @@ export default function Home() {
 
       for (const [r, c] of diag) {
         setHighlight([{ r, c }])
-        await wait(350)
+        await wait(500)
         nums.push(extendedMatrix[r][c])
       }
 
@@ -105,10 +106,11 @@ export default function Home() {
 
       log.push(`${nums.join(" × ")} = ${mult}`)
       setSteps([...log])
-      await wait(600)
+      await wait(500)
     }
 
     setHighlight([])
+    await wait(300);
 
     const posMain = main.map(diag =>
       diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
@@ -141,7 +143,6 @@ export default function Home() {
     setSteps([...log])
 
     setIsAnimating(false)
-
   }
 
   function clearInputs() {
@@ -175,7 +176,7 @@ export default function Home() {
       <motion.h1 className="font-extrabold mt-4 md:text-3xl text-xl text-center" initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}>
-        Cálculo de determinante 3x3 — Regra de Sarrus
+        Cálculo de determinante 3x3 - Regra de Sarrus
       </motion.h1>
 
       <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
@@ -195,7 +196,14 @@ export default function Home() {
                     scale: active ? 1.25 : 1,
                     backgroundColor: active ? "#985c7e" : "#57394b"
                   }}
-                  transition={{ duration: 0.3 }}
+                  transition={{
+                    duration: 0.3,
+                    backgroundColor: {
+                      duration: 0.3,
+                      ease: "easeInOut",
+                      delay: r * 0.05,
+                    }, ease: "easeOut"
+                  }}
                   className="sm:w-16 sm:h-16 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-white text-lg"
                 >
                   {isExtra ? (
@@ -219,6 +227,10 @@ export default function Home() {
                         const copy = matrix.map(row => [...row])
                         copy[r][c] = Number(e.target.value)
                         setMatrix(copy)
+
+                        if (extended.length > 0) {
+                          setExtended(copy.map(r => [...r, r[0], r[1]]))
+                        }
                       }}
                     />
                   )}
@@ -227,57 +239,70 @@ export default function Home() {
             })
           )}
         </div>
+        <AnimatePresence>
+          {showSteps && (
+            <motion.div className="w-full rounded-lg pt-4 pr-4 text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{
+                opacity: 0, y: -10, transition: {
+                  duration: 0.2
+                }
+              }}
+              transition={{
+                duration: 0.9,
+              }}>
 
-        {showSteps && (
-          <motion.div className="w-full min-h-[200px] bg-[#] rounded-lg pt-4 pr-4 text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}>
+              <h1 className="font-extrabold">Cálculo:</h1>
 
-            <h1 className="font-extrabold">Cálculo:</h1>
+              {steps.map((s, i) => (
+                <motion.div
+                  className="font-bold"
+                  key={i}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {s}
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            {steps.map((s, i) => (
-              <motion.div
-                className="font-bold"
-                key={i}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+        <AnimatePresence>
+          {!isAnimating && (
+            <motion.div className="w-full rounded-lg text-white text-lg space-y-2 mt-6" initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}>
+              <button
+                disabled={isAnimating}
+                onClick={calculateDeterminant}
+                className={`w-full p-2 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
               >
-                {s}
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-
-        {!isAnimating && (
-          <div className="w-full rounded-lg text-white text-lg space-y-2 mt-6">
-            <button
-              disabled={isAnimating}
-              onClick={calculateDeterminant}
-              className={`w-full p-2 rounded-lg font-bold text-white 
+                Calcular
+              </button>
+              <button
+                disabled={isAnimating}
+                onClick={generateRandomMatrix}
+                className={`w-full p-2 rounded-lg font-bold text-white 
             ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
-            >
-              Calcular
-            </button>
-            <button
-              disabled={isAnimating}
-              onClick={generateRandomMatrix}
-              className={`w-full p-2 rounded-lg font-bold text-white 
+              >
+                Aleatório
+              </button>
+              <button
+                disabled={isAnimating}
+                onClick={clearInputs}
+                className={`w-full p-2 rounded-lg font-bold text-white 
             ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
-            >
-              Aleatório
-            </button>
-            <button
-              disabled={isAnimating}
-              onClick={clearInputs}
-              className={`w-full p-2 rounded-lg font-bold text-white 
-            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
-            >
-              Limpar
-            </button>
-          </div>
-        )}
-      </motion.div>
-    </main>
+              >
+                Limpar
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div >
+    </main >
   );
 }
