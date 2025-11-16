@@ -5,24 +5,32 @@ import { motion } from "framer-motion";
 
 export default function Home() {
 
+  // Matriz principal 3x3
   const [matrix, setMatrix] = useState<number[][]>([
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]]
   );
 
+  // Matriz estendida 3x5
   const [extended, setExtended] = useState<number[][]>([]);
+  // Passos do cálculo
   const [steps, setSteps] = useState<string[]>([]);
+  // Destaques na matriz
   const [highlight, setHighlight] = useState<{ r: number, c: number }[]>([]);
+  // Animação em andamento
   const [isAnimating, setIsAnimating] = useState(false);
+  // Mostrar passos
   const [showSteps, setShowSteps] = useState(false);
 
+  // Diagonal principal
   const main = [
     [[0, 0], [1, 1], [2, 2]],
     [[0, 1], [1, 2], [2, 3]],
     [[0, 2], [1, 3], [2, 4]],
   ]
 
+  // Diagonal secundária
   const secondary = [
     [[0, 2], [1, 1], [2, 0]],
     [[0, 3], [1, 2], [2, 1]],
