@@ -49,6 +49,7 @@ export default function Home() {
 
     setSteps([]);
     setHighlight([]);
+    setExtended([]);
 
     for (let c = 0; c <= 1; c++) {
       for (let r = 2; r >= 0; r--) {
