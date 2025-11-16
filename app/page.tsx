@@ -17,13 +17,13 @@ export default function Home() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
 
-  const pos = [
+  const main = [
     [[0, 0], [1, 1], [2, 2]],
     [[0, 1], [1, 2], [2, 3]],
     [[0, 2], [1, 3], [2, 4]],
   ]
 
-  const neg = [
+  const secondary = [
     [[0, 2], [1, 1], [2, 0]],
     [[0, 3], [1, 2], [2, 1]],
     [[0, 4], [1, 3], [2, 2]],
@@ -56,14 +56,14 @@ export default function Home() {
     const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
     setExtended(extendedMatrix);
 
-    // Diagonais positivas
+    // Diagonais principais
     await wait(500);
     let log: string[] = [];
     log.push("Diagonais principais:");
 
-    for (const diagPos of pos) {
+    for (const diagMain of main) {
       let nums: number[] = [];
-      for (const [r, c] of diagPos) {
+      for (const [r, c] of diagMain) {
         setHighlight([{ r, c }]);
         await wait(500);
         nums.push(extendedMatrix[r][c]);
@@ -77,12 +77,12 @@ export default function Home() {
 
     setHighlight([]);
 
-    // Diagonais negativas
+    // Diagonais secundárias
     log.push("Diagonais secundárias:");
     setSteps([...log]);
     await wait(600);
 
-    for (const diag of neg) {
+    for (const diag of secondary) {
 
       let nums: number[] = []
 
@@ -101,32 +101,32 @@ export default function Home() {
 
     setHighlight([])
 
-    const positivos = pos.map(diag =>
+    const posMain = main.map(diag =>
       diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
     )
-    const negativos = neg.map(diag =>
+    const posSecondary = secondary.map(diag =>
       diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
     )
 
-    const somaPos = positivos.reduce((a, b) => a + b, 0)
-    const somaNeg = negativos.reduce((a, b) => a + b, 0)
+    const sumMain = posMain.reduce((a, b) => a + b, 0)
+    const sumSecondary = posSecondary.reduce((a, b) => a + b, 0)
 
     log.push(`Soma diagonais principais:`)
-    log.push(positivos.map(p => p.toString()).join(" + ") + ` = ${somaPos}`)
+    log.push(posMain.map(p => p.toString()).join(" + ") + ` = ${sumMain}`)
     setSteps([...log])
     await wait(500)
 
     log.push(`Soma diagonais secundárias:`)
-    log.push(negativos.map(n => n.toString()).join(" + ") + ` = ${somaNeg}`)
+    log.push(posSecondary.map(n => n.toString()).join(" + ") + ` = ${sumSecondary}`)
     setSteps([...log])
     await wait(500)
 
     log.push(`Subtração das diagonais:`);
-    log.push(`${somaPos} - ${somaNeg}`)
+    log.push(`${sumMain} - ${sumSecondary}`)
     setSteps([...log])
     await wait(500)
 
-    const det = somaPos - somaNeg
+    const det = sumMain - sumSecondary
     log.push(`Determinante:`)
     log.push(`${det}`)
     setSteps([...log])
