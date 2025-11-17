@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function Home() {
@@ -36,6 +36,27 @@ export default function Home() {
     [[0, 3], [1, 2], [2, 1]],
     [[0, 4], [1, 3], [2, 2]],
   ]
+
+  useEffect(() => {
+    const savedMatrix = localStorage.getItem("matrix");
+    const savedExtended = localStorage.getItem("extendedMatrix")
+
+    if (savedExtended) {
+      setExtended(JSON.parse(savedExtended));
+    }
+    if (savedMatrix) {
+      setMatrix(JSON.parse(savedMatrix));
+    }
+  }, [])
+
+  useEffect(() => {
+    if (matrix) localStorage.setItem("matrix", JSON.stringify(matrix));
+    if (extended.length > 0 && extended[0].length === 5) {
+      localStorage.setItem("extendedMatrix", JSON.stringify(extended));
+    } else {
+      localStorage.removeItem("extendedMatrix");
+    }
+  }, [matrix, extended])
 
   function wait(ms: number) {
     return new Promise(res => setTimeout(res, ms))
