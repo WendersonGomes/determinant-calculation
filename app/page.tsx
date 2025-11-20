@@ -61,7 +61,7 @@ export default function Home() {
     return new Promise(res => setTimeout(res, ms))
   }
 
-  async function calculateDeterminantInstant() {
+  function calculateDeterminantInstant() {
     const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
 
     const posMain = main.map(diag =>
@@ -215,7 +215,7 @@ export default function Home() {
   }
 
   async function handleCalculateDeterminant() {
-    const value =  await calculateDeterminantInstant();
+    const value = calculateDeterminantInstant();
 
     localStorage.setItem("values", JSON.stringify(value));
     calculateDeterminantAnimated();
