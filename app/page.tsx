@@ -120,22 +120,25 @@ export default function Home() {
     setHighlight([]);
     setExtended([]);
 
+    let log: string[] = [];
+    log.push("Cópia das colunas 1 e 2 para o final da matriz");
     for (let c = 0; c <= 1; c++) {
       for (let r = 2; r >= 0; r--) {
         setHighlight([{ r, c }]);
         await wait(500);
+        setSteps([...log]);
       }
       await wait(500);
     }
 
     setHighlight([]);
+
     await wait(300);
 
     const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
     setExtended(extendedMatrix);
 
     // Diagonais principais
-    let log: string[] = [];
     log.push("Multiplicação das diagonais principais:");
     await wait(300);
 
@@ -320,7 +323,7 @@ export default function Home() {
         </div>
         <AnimatePresence>
           {showSteps && (
-            <motion.div className="w-full rounded-lg pt-4 pr-4 text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
+            <motion.div className="w-full rounded-lg pt-4 pr-4 text-white text-md space-y-2" initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{
                 opacity: 0, y: -10, transition: {
