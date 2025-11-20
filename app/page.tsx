@@ -39,30 +39,78 @@ export default function Home() {
 
   useEffect(() => {
     const savedMatrix = localStorage.getItem("matrix");
-    const savedExtended = localStorage.getItem("extendedMatrix")
+    const savedValues = localStorage.getItem("values");
 
-    if (savedExtended) {
-      setExtended(JSON.parse(savedExtended));
-    }
     if (savedMatrix) {
       setMatrix(JSON.parse(savedMatrix));
     }
-  }, [])
+
+    if (savedValues) {
+      const data = JSON.parse(savedValues);
+      setSteps(data.steps);
+      setShowSteps(data.showSteps);
+      setExtended(data.extended);
+    }
+  }, []);
 
   useEffect(() => {
-    if (matrix) localStorage.setItem("matrix", JSON.stringify(matrix));
-    if (extended.length > 0 && extended[0].length === 5) {
-      localStorage.setItem("extendedMatrix", JSON.stringify(extended));
-    } else {
-      localStorage.removeItem("extendedMatrix");
-    }
-  }, [matrix, extended])
+    localStorage.setItem("matrix", JSON.stringify(matrix));
+  }, [matrix]);
 
   function wait(ms: number) {
     return new Promise(res => setTimeout(res, ms))
   }
 
-  async function calculateDeterminant() {
+  async function calculateDeterminantInstant() {
+    const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
+
+    const posMain = main.map(diag =>
+      diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
+    );
+
+    const posSecondary = secondary.map(diag =>
+      diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
+    );
+
+    const sumMain = posMain.reduce((a, b) => a + b, 0);
+    const sumSecondary = posSecondary.reduce((a, b) => a + b, 0);
+    const det = sumMain - sumSecondary;
+
+    const log = [
+      "Diagonais principais:",
+      ...main.map(diag =>
+        diag.map(([r, c]) => extendedMatrix[r][c]).join(" × ") +
+        " = " +
+        diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
+      ),
+      "Diagonais secundárias:",
+      ...secondary.map(diag =>
+        diag.map(([r, c]) => extendedMatrix[r][c]).join(" × ") +
+        " = " +
+        diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
+      ),
+      `Soma diagonais principais:`,
+      posMain.join(" + ") + ` = ${sumMain}`,
+      `Soma diagonais secundárias:`,
+      posSecondary.join(" + ") + ` = ${sumSecondary}`,
+      `Subtração das diagonais:`,
+      `${sumMain} - ${sumSecondary}`,
+      `Determinante:`,
+      `${det}`
+    ];
+
+    setShowSteps(true);
+    setSteps(log);
+    setExtended(extendedMatrix);
+
+    return {
+      steps: log,
+      extended: extendedMatrix,
+      showSteps: true
+    }
+  }
+
+  async function calculateDeterminantAnimated() {
     if (isAnimating) return;
 
     setShowSteps(true);
@@ -166,6 +214,13 @@ export default function Home() {
     setIsAnimating(false)
   }
 
+  async function handleCalculateDeterminant() {
+    const value =  await calculateDeterminantInstant();
+
+    localStorage.setItem("values", JSON.stringify(value));
+    calculateDeterminantAnimated();
+  }
+
   function clearInputs() {
     if (isAnimating) return;
     setMatrix([
@@ -177,6 +232,7 @@ export default function Home() {
     setSteps([]);
     setHighlight([]);
     setShowSteps(false);
+    localStorage.removeItem("values");
   }
 
   function generateRandomMatrix() {
@@ -185,10 +241,12 @@ export default function Home() {
       Array.from({ length: 3 }, () => Math.floor(Math.random() * 10) - 5)
     );
     setMatrix(randomMatrix);
+    localStorage.setItem("matrix", JSON.stringify(randomMatrix));
     setExtended([]);
     setSteps([]);
     setHighlight([]);
     setShowSteps(false);
+    localStorage.removeItem("values");
   }
 
   return (
@@ -298,7 +356,7 @@ export default function Home() {
               transition={{ duration: 0.2 }}>
               <button
                 disabled={isAnimating}
-                onClick={calculateDeterminant}
+                onClick={handleCalculateDeterminant}
                 className={`w-full p-2 rounded-lg font-bold text-white 
             ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
               >
