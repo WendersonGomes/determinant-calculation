@@ -77,21 +77,21 @@ export default function Home() {
     const det = sumMain - sumSecondary;
 
     const log = [
-      "Diagonais principais:",
+      "Multiplicação das diagonais principais:",
       ...main.map(diag =>
         diag.map(([r, c]) => extendedMatrix[r][c]).join(" × ") +
         " = " +
         diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
       ),
-      "Diagonais secundárias:",
+      "Multiplicação das diagonais secundárias:",
       ...secondary.map(diag =>
         diag.map(([r, c]) => extendedMatrix[r][c]).join(" × ") +
         " = " +
         diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
       ),
-      `Soma diagonais principais:`,
+      `Soma das diagonais principais:`,
       posMain.join(" + ") + ` = ${sumMain}`,
-      `Soma diagonais secundárias:`,
+      `Soma das diagonais secundárias:`,
       posSecondary.join(" + ") + ` = ${sumSecondary}`,
       `Subtração das diagonais:`,
       `${sumMain} - ${sumSecondary}`,
@@ -136,7 +136,7 @@ export default function Home() {
 
     // Diagonais principais
     let log: string[] = [];
-    log.push("Diagonais principais:");
+    log.push("Multiplicação das diagonais principais:");
     await wait(300);
 
     for (const diagMain of main) {
@@ -157,7 +157,7 @@ export default function Home() {
     await wait(300);
 
     // Diagonais secundárias
-    log.push("Diagonais secundárias:");
+    log.push("Multiplicação das diagonais secundárias:");
     setSteps([...log]);
     await wait(300);
 
@@ -191,12 +191,12 @@ export default function Home() {
     const sumMain = posMain.reduce((a, b) => a + b, 0)
     const sumSecondary = posSecondary.reduce((a, b) => a + b, 0)
 
-    log.push(`Soma diagonais principais:`)
+    log.push(`Soma das diagonais principais:`)
     log.push(posMain.map(p => p.toString()).join(" + ") + ` = ${sumMain}`)
     setSteps([...log])
     await wait(500)
 
-    log.push(`Soma diagonais secundárias:`)
+    log.push(`Soma das diagonais secundárias:`)
     log.push(posSecondary.map(n => n.toString()).join(" + ") + ` = ${sumSecondary}`)
     setSteps([...log])
     await wait(500)
