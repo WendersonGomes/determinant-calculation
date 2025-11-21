@@ -335,7 +335,7 @@ export default function Home() {
                 duration: 0.9,
               }}>
 
-              <h1 className="font-extrabold">Cálculo:</h1>
+              <h1 className="font-extrabold text-base md:text-lg">Cálculo:</h1>
 
               {steps.map((s, i) => (
                 <motion.div
