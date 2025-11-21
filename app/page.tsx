@@ -324,7 +324,7 @@ export default function Home() {
         </div>
         <AnimatePresence>
           {showSteps && (
-            <motion.div className="w-full rounded-lg pt-4 pr-4 text-white text-sm md:text-md space-y-2" initial={{ opacity: 0, y: -10 }}
+            <motion.div className="w-full rounded-lg pt-4 pr-4 text-white text-sm md:text-base space-y-2" initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{
                 opacity: 0, y: -10, transition: {
