@@ -6,14 +6,14 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Home() {
 
   // Matriz principal 3x3
-  const [matrix, setMatrix] = useState<number[][]>([
+  const [matrix, setMatrix] = useState<(number | string)[][]>([
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]]
   );
 
   // Matriz estendida 3x5
-  const [extended, setExtended] = useState<number[][]>([]);
+  const [extended, setExtended] = useState<(number | string)[][]>([]);
   // Passos do cálculo
   const [steps, setSteps] = useState<string[]>([]);
   // Destaques na matriz
@@ -62,7 +62,15 @@ export default function Home() {
   }
 
   function calculateDeterminantInstant() {
-    const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
+    const numericMatrix: number[][] = matrix.map(row =>
+      row.map(val => {
+        const parsed = Number(val);
+
+        return isNaN(parsed) ? 0 : parsed;
+      })
+    );
+
+    const extendedMatrix = numericMatrix.map(r => [...r, r[0], r[1]]);
 
     const posMain = main.map(diag =>
       diag.reduce((acc, [r, c]) => acc * extendedMatrix[r][c], 1)
@@ -136,7 +144,15 @@ export default function Home() {
 
     await wait(300);
 
-    const extendedMatrix = matrix.map(r => [...r, r[0], r[1]]);
+    const numericMatrix: number[][] = matrix.map(row =>
+      row.map(val => {
+        const parsed = Number(val);
+
+        return isNaN(parsed) ? 0 : parsed;
+      })
+    );
+
+    const extendedMatrix = numericMatrix.map(r => [...r, r[0], r[1]]);
     setExtended(extendedMatrix);
 
     // Diagonais principais
@@ -301,18 +317,21 @@ export default function Home() {
                     <input
                       type="number"
                       disabled={isAnimating}
-                      className="w-full h-full bg-transparent text-center font-bold text-white
+                      className="w-full h-full bg-transparent text-center font-bold text-white placeholder:text-sm
                         focus:outline-none [appearance:textfield]
                         [&::-webkit-inner-spin-button]:appearance-none 
                         [&::-webkit-outer-spin-button]:appearance-none"
-                      value={value}
+                      value={value.toString()}
+                      placeholder={`x${r + 1}${c + 1}`}
                       onChange={(e) => {
-                        const copy = matrix.map(row => [...row])
-                        copy[r][c] = Number(e.target.value)
-                        setMatrix(copy)
+                        const val = e.target.value;
+                        const copy = matrix.map(row => [...row]);
+
+                        copy[r][c] = val;
+                        setMatrix(copy);
 
                         if (extended.length > 0) {
-                          setExtended(copy.map(r => [...r, r[0], r[1]]))
+                          setExtended(copy.map(r => [...r, r[0], r[1]]));
                         }
                       }}
                     />
