@@ -7,9 +7,9 @@ export default function Home() {
 
   // Matriz principal 3x3
   const [matrix, setMatrix] = useState<(number | string)[][]>([
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]]
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""]]
   );
 
   // Matriz estendida 3x5
@@ -244,9 +244,9 @@ export default function Home() {
   function clearInputs() {
     if (isAnimating) return;
     setMatrix([
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0]]
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""]]
     );
     setExtended([]);
     setSteps([]);
