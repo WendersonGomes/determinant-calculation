@@ -270,7 +270,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center p-6">
+    <main className="flex flex-col items-center justify-center p-4">
 
       <motion.h1 className="font-extrabold mt-4 md:text-3xl text-xl text-center" initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -278,11 +278,11 @@ export default function Home() {
         Cálculo de determinante 3x3 - Regra de Sarrus
       </motion.h1>
 
-      <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-4xl flex flex-col md:flex-row gap-6 items-start justify-center rounded-2xl p-6" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
+      <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-4xl flex flex-col md:flex-row gap-4 items-start justify-center rounded-2xl p-4" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
 
         {/* MATRIZ ANIMADA */}
-        <div className="flex flex-col items-center md:w-1/2 w-full">
-          <div className={` bg-[#3431313f] w-full rounded-2xl p-6 ${extended.length ? "" : "flex flex-col justify-center items-center"}`}>
+        <div className="flex flex-col items-center justify-center md:w-1/2 w-full">
+          <div className={` bg-[#3431313f] w-full rounded-2xl p-4 ${extended.length ? "" : ""}`}>
             <div className="flex flex-col items-center">
               <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3 w-max"}`}>
                 {(extended.length ? extended : matrix).map((row, r) =>
@@ -306,7 +306,7 @@ export default function Home() {
                             delay: r * 0.05,
                           }, ease: "easeOut"
                         }}
-                        className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-lg font-bold text-white"
+                        className="w-11 h-11 md:w-16 md:h-16 flex items-center justify-center rounded-lg font-bold text-white"
                       >
                         {isExtra ? (
                           <motion.div
@@ -349,10 +349,10 @@ export default function Home() {
           </div>
 
           {/* BOTÔES PC */}
-          <div className="hidden md:block w-full mt-6 rounded-2xl">
+          <div className="hidden md:block w-full rounded-2xl">
             <AnimatePresence>
               {!isAnimating && (
-                <motion.div className="w-full rounded-lg text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
+                <motion.div className="w-full rounded-lg text-white text-lg space-y-2 mt-4" initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}>
@@ -388,7 +388,7 @@ export default function Home() {
 
         {/* PASSOS DO CÁLCULO */}
         {showSteps && (
-          <div className={`bg-[#3431313f] p-6 rounded-2xl ${showSteps ? "md:w-1/2 w-full" : ""}`}>
+          <div className={`bg-[#3431313f] p-4 rounded-2xl ${showSteps ? "md:w-1/2 w-full" : ""}`}>
             <AnimatePresence>
 
               <motion.div className="w-full rounded-lg pr-4 text-white text-sm md:text-base space-y-2" initial={{ opacity: 0, y: -10 }}
