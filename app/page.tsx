@@ -282,66 +282,70 @@ export default function Home() {
 
         {/* MATRIZ ANIMADA */}
         <div className="flex flex-col items-center md:w-1/2 w-full">
-          <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
-            {(extended.length ? extended : matrix).map((row, r) =>
-              row.map((value, c) => {
-                const active = highlight.some(h => h.r === r && h.c === c)
+          <div className={` bg-[#3431313f] w-full rounded-2xl p-6 ${extended.length ? "" : "flex flex-col justify-center items-center"}`}>
+            <div className="">
+              <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3 w-max"}`}>
+                {(extended.length ? extended : matrix).map((row, r) =>
+                  row.map((value, c) => {
+                    const active = highlight.some(h => h.r === r && h.c === c)
 
-                const isExtra = extended.length > 0 && c >= 3
+                    const isExtra = extended.length > 0 && c >= 3
 
-                return (
-                  <motion.div
-                    key={`${r}-${c}`}
-                    animate={{
-                      scale: active ? 1.25 : 1,
-                      backgroundColor: active ? "#985c7e" : "#57394b"
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      backgroundColor: {
-                        duration: 0.3,
-                        ease: "easeInOut",
-                        delay: r * 0.05,
-                      }, ease: "easeOut"
-                    }}
-                    className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-lg font-bold text-white"
-                  >
-                    {isExtra ? (
+                    return (
                       <motion.div
-                        initial={{ opacity: 0, x: -20, scale: 0.8 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        transition={{ duration: 0.35, ease: "easeOut" }}
+                        key={`${r}-${c}`}
+                        animate={{
+                          scale: active ? 1.25 : 1,
+                          backgroundColor: active ? "#985c7e" : "#57394b"
+                        }}
+                        transition={{
+                          duration: 0.3,
+                          backgroundColor: {
+                            duration: 0.3,
+                            ease: "easeInOut",
+                            delay: r * 0.05,
+                          }, ease: "easeOut"
+                        }}
+                        className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-lg font-bold text-white"
                       >
-                        {value}
-                      </motion.div>
-                    ) : (
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        disabled={isAnimating}
-                        className="w-full h-full bg-transparent text-center font-bold text-white placeholder:text-sm
+                        {isExtra ? (
+                          <motion.div
+                            initial={{ opacity: 0, x: -20, scale: 0.8 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            transition={{ duration: 0.35, ease: "easeOut" }}
+                          >
+                            {value}
+                          </motion.div>
+                        ) : (
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            disabled={isAnimating}
+                            className="w-full h-full bg-transparent text-center font-bold text-white placeholder:text-sm
                         focus:outline-none [appearance:textfield]
                         [&::-webkit-inner-spin-button]:appearance-none 
                         [&::-webkit-outer-spin-button]:appearance-none"
-                        value={value.toString()}
-                        placeholder={`x${r + 1}${c + 1}`}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          const copy = matrix.map(row => [...row]);
+                            value={value.toString()}
+                            placeholder={`x${r + 1}${c + 1}`}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              const copy = matrix.map(row => [...row]);
 
-                          copy[r][c] = val;
-                          setMatrix(copy);
+                              copy[r][c] = val;
+                              setMatrix(copy);
 
-                          if (extended.length > 0) {
-                            setExtended(copy.map(r => [...r, r[0], r[1]]));
-                          }
-                        }}
-                      />
-                    )}
-                  </motion.div>
-                )
-              })
-            )}
+                              if (extended.length > 0) {
+                                setExtended(copy.map(r => [...r, r[0], r[1]]));
+                              }
+                            }}
+                          />
+                        )}
+                      </motion.div>
+                    )
+                  })
+                )}
+              </div>
+            </div>
           </div>
 
           {/* BOTÔES PC */}
