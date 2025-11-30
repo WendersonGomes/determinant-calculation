@@ -279,7 +279,7 @@ export default function Home() {
       </motion.h1>
 
       <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
-
+        
         {/* MATRIZ ANIMADA */}
         <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
           {(extended.length ? extended : matrix).map((row, r) =>
@@ -315,7 +315,8 @@ export default function Home() {
                     </motion.div>
                   ) : (
                     <input
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       disabled={isAnimating}
                       className="w-full h-full bg-transparent text-center font-bold text-white placeholder:text-sm
                         focus:outline-none [appearance:textfield]
