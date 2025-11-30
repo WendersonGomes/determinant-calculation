@@ -278,133 +278,181 @@ export default function Home() {
         Cálculo de determinante 3x3 - Regra de Sarrus
       </motion.h1>
 
-      <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-xl flex flex-col items-center rounded-2xl p-6 shadow-lg" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
-        
+      <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-4xl flex flex-col md:flex-row gap-6 items-start justify-center rounded-2xl p-6" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
+
         {/* MATRIZ ANIMADA */}
-        <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
-          {(extended.length ? extended : matrix).map((row, r) =>
-            row.map((value, c) => {
-              const active = highlight.some(h => h.r === r && h.c === c)
+        <div className="flex flex-col items-center md:w-1/2 w-full">
+          <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3"}`}>
+            {(extended.length ? extended : matrix).map((row, r) =>
+              row.map((value, c) => {
+                const active = highlight.some(h => h.r === r && h.c === c)
 
-              const isExtra = extended.length > 0 && c >= 3
+                const isExtra = extended.length > 0 && c >= 3
 
-              return (
-                <motion.div
-                  key={`${r}-${c}`}
-                  animate={{
-                    scale: active ? 1.25 : 1,
-                    backgroundColor: active ? "#985c7e" : "#57394b"
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    backgroundColor: {
+                return (
+                  <motion.div
+                    key={`${r}-${c}`}
+                    animate={{
+                      scale: active ? 1.25 : 1,
+                      backgroundColor: active ? "#985c7e" : "#57394b"
+                    }}
+                    transition={{
                       duration: 0.3,
-                      ease: "easeInOut",
-                      delay: r * 0.05,
-                    }, ease: "easeOut"
-                  }}
-                  className="sm:w-16 sm:h-16 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-white text-lg"
-                >
-                  {isExtra ? (
-                    <motion.div
-                      initial={{ opacity: 0, x: -20, scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, scale: 1 }}
-                      transition={{ duration: 0.35, ease: "easeOut" }}
-                    >
-                      {value}
-                    </motion.div>
-                  ) : (
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      disabled={isAnimating}
-                      className="w-full h-full bg-transparent text-center font-bold text-white placeholder:text-sm
+                      backgroundColor: {
+                        duration: 0.3,
+                        ease: "easeInOut",
+                        delay: r * 0.05,
+                      }, ease: "easeOut"
+                    }}
+                    className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-lg font-bold text-white"
+                  >
+                    {isExtra ? (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20, scale: 0.8 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ duration: 0.35, ease: "easeOut" }}
+                      >
+                        {value}
+                      </motion.div>
+                    ) : (
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        disabled={isAnimating}
+                        className="w-full h-full bg-transparent text-center font-bold text-white placeholder:text-sm
                         focus:outline-none [appearance:textfield]
                         [&::-webkit-inner-spin-button]:appearance-none 
                         [&::-webkit-outer-spin-button]:appearance-none"
-                      value={value.toString()}
-                      placeholder={`x${r + 1}${c + 1}`}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        const copy = matrix.map(row => [...row]);
+                        value={value.toString()}
+                        placeholder={`x${r + 1}${c + 1}`}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          const copy = matrix.map(row => [...row]);
 
-                        copy[r][c] = val;
-                        setMatrix(copy);
+                          copy[r][c] = val;
+                          setMatrix(copy);
 
-                        if (extended.length > 0) {
-                          setExtended(copy.map(r => [...r, r[0], r[1]]));
-                        }
-                      }}
-                    />
-                  )}
-                </motion.div>
-              )
-            })
-          )}
-        </div>
-        <AnimatePresence>
-          {showSteps && (
-            <motion.div className="w-full rounded-lg pt-4 pr-4 text-white text-sm md:text-base space-y-2" initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{
-                opacity: 0, y: -10, transition: {
-                  duration: 0.2
-                }
-              }}
-              transition={{
-                duration: 0.9,
-              }}>
+                          if (extended.length > 0) {
+                            setExtended(copy.map(r => [...r, r[0], r[1]]));
+                          }
+                        }}
+                      />
+                    )}
+                  </motion.div>
+                )
+              })
+            )}
+          </div>
 
-              <h1 className="font-extrabold text-base md:text-lg">Cálculo:</h1>
-
-              {steps.map((s, i) => (
-                <motion.div
-                  className="font-bold"
-                  key={i}
-                  initial={{ opacity: 0, y: -10 }}
+          {/* BOTÔES PC */}
+          <div className="hidden md:block w-full">
+            <AnimatePresence>
+              {!isAnimating && (
+                <motion.div className="w-full rounded-lg text-white text-lg space-y-2 mt-6" initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {s}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}>
+                  <button
+                    disabled={isAnimating}
+                    onClick={handleCalculateDeterminant}
+                    className={`w-full p-2 md:p-3 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
+                  >
+                    Calcular
+                  </button>
+                  <button
+                    disabled={isAnimating}
+                    onClick={generateRandomMatrix}
+                    className={`w-full p-2 md:p-3 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
+                  >
+                    Aleatório
+                  </button>
+                  <button
+                    disabled={isAnimating}
+                    onClick={clearInputs}
+                    className={`w-full p-2 md:p-3 rounded-lg font-bold text-white 
+            ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
+                  >
+                    Limpar
+                  </button>
                 </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
 
-        <AnimatePresence>
-          {!isAnimating && (
-            <motion.div className="w-full rounded-lg text-white text-lg space-y-2 mt-6" initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.2 }}>
-              <button
-                disabled={isAnimating}
-                onClick={handleCalculateDeterminant}
-                className={`w-full p-2 rounded-lg font-bold text-white 
+        {/* PASSOS DO CÁLCULO */}
+        {showSteps && (
+          <div className={`${showSteps ? "md:w-1/2 w-full" : ""}`}>
+            <AnimatePresence>
+
+              <motion.div className="w-full rounded-lg pr-4 text-white text-sm md:text-base space-y-2" initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{
+                  opacity: 0, y: -10, transition: {
+                    duration: 0.2
+                  }
+                }}
+                transition={{
+                  duration: 0.9,
+                }}>
+
+                <h1 className="font-extrabold text-base md:text-lg">Cálculo:</h1>
+
+                {steps.map((s, i) => (
+                  <motion.div
+                    className="flex items-start gap-3 font-bold"
+                    key={i}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <div className="self-stretch w-0.5 bg-[#98557d] rounded-full" />
+                    {s}
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        )}
+
+        {/* BOTÔES MOBILE */}
+        < div className="block md:hidden w-full">
+          <AnimatePresence>
+            {!isAnimating && (
+              <motion.div className="w-full rounded-lg text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}>
+                <button
+                  disabled={isAnimating}
+                  onClick={handleCalculateDeterminant}
+                  className={`w-full p-2 md:p-3 rounded-lg font-bold text-white 
             ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
-              >
-                Calcular
-              </button>
-              <button
-                disabled={isAnimating}
-                onClick={generateRandomMatrix}
-                className={`w-full p-2 rounded-lg font-bold text-white 
+                >
+                  Calcular
+                </button>
+                <button
+                  disabled={isAnimating}
+                  onClick={generateRandomMatrix}
+                  className={`w-full p-2 md:p-3 rounded-lg font-bold text-white 
             ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
-              >
-                Aleatório
-              </button>
-              <button
-                disabled={isAnimating}
-                onClick={clearInputs}
-                className={`w-full p-2 rounded-lg font-bold text-white 
+                >
+                  Aleatório
+                </button>
+                <button
+                  disabled={isAnimating}
+                  onClick={clearInputs}
+                  className={`w-full p-2 md:p-3 rounded-lg font-bold text-white 
             ${isAnimating ? "bg-gray-500" : "bg-[#57394b] hover:bg-[#985c7e] transition-colors"}`}
-              >
-                Limpar
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                >
+                  Limpar
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div >
     </main >
   );
