@@ -283,7 +283,7 @@ export default function Home() {
         {/* MATRIZ ANIMADA */}
         <div className="flex flex-col items-center md:w-1/2 w-full">
           <div className={` bg-[#3431313f] w-full rounded-2xl p-6 ${extended.length ? "" : "flex flex-col justify-center items-center"}`}>
-            <div className="">
+            <div className="flex flex-col items-center">
               <div className={`grid gap-2 ${extended.length ? "grid-cols-5" : "grid-cols-3 w-max"}`}>
                 {(extended.length ? extended : matrix).map((row, r) =>
                   row.map((value, c) => {
@@ -349,10 +349,10 @@ export default function Home() {
           </div>
 
           {/* BOTÔES PC */}
-          <div className="hidden md:block w-full">
+          <div className="hidden md:block w-full mt-6 rounded-2xl">
             <AnimatePresence>
               {!isAnimating && (
-                <motion.div className="w-full rounded-lg text-white text-lg space-y-2 mt-6" initial={{ opacity: 0, y: -10 }}
+                <motion.div className="w-full rounded-lg text-white text-lg space-y-2" initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}>
@@ -388,7 +388,7 @@ export default function Home() {
 
         {/* PASSOS DO CÁLCULO */}
         {showSteps && (
-          <div className={`${showSteps ? "md:w-1/2 w-full" : ""}`}>
+          <div className={`bg-[#3431313f] p-6 rounded-2xl ${showSteps ? "md:w-1/2 w-full" : ""}`}>
             <AnimatePresence>
 
               <motion.div className="w-full rounded-lg pr-4 text-white text-sm md:text-base space-y-2" initial={{ opacity: 0, y: -10 }}
