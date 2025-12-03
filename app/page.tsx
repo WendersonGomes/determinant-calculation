@@ -278,7 +278,7 @@ export default function Home() {
         Cálculo de determinante 3x3 - Regra de Sarrus
       </motion.h1>
 
-      <motion.div className="bg-[#1a1a1a] mt-10 w-full max-w-4xl flex flex-col md:flex-row gap-4 items-start justify-center rounded-2xl p-4" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
+      <motion.div className="bg-[#1a1a1a] mt-8 w-full max-w-4xl flex flex-col md:flex-row gap-4 items-start justify-center rounded-2xl p-4" initial={{ opacity: 0, y: -10, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease: "easeOut" }}>
 
         {/* MATRIZ ANIMADA */}
         <div className="flex flex-col items-center justify-center md:w-1/2 w-full">
